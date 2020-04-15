@@ -6,6 +6,8 @@ package xputtest
 import (
 	"sync"
 
+	"github.com/sasha-s/go-deadlock"
+
 	"github.com/ava-labs/gecko/ids"
 	"github.com/ava-labs/gecko/snow"
 	"github.com/ava-labs/gecko/snow/choices"
@@ -18,7 +20,7 @@ type issuableVM interface {
 
 // Issuer manages all the chain transaction flushing.
 type Issuer struct {
-	lock      sync.Mutex
+	lock      deadlock.Mutex
 	log       logging.Logger
 	vms       map[[32]byte]issuableVM
 	locks     map[[32]byte]sync.Locker

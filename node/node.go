@@ -14,8 +14,9 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"sync"
 	"unsafe"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/salticidae-go"
 
@@ -520,7 +521,7 @@ func (n *Node) initKeystoreAPI() {
 	n.keystoreServer.Initialize(n.Log, keystoreDB)
 	keystoreHandler := n.keystoreServer.CreateHandler()
 	if n.Config.KeystoreAPIEnabled {
-		n.APIServer.AddRoute(keystoreHandler, &sync.RWMutex{}, "keystore", "", n.HTTPLog)
+		n.APIServer.AddRoute(keystoreHandler, &deadlock.RWMutex{}, "keystore", "", n.HTTPLog)
 	}
 }
 
@@ -530,7 +531,7 @@ func (n *Node) initMetricsAPI() {
 	n.Log.Info("initializing Metrics API")
 	registry, handler := metrics.NewService()
 	if n.Config.MetricsAPIEnabled {
-		n.APIServer.AddRoute(handler, &sync.RWMutex{}, "metrics", "", n.HTTPLog)
+		n.APIServer.AddRoute(handler, &deadlock.RWMutex{}, "metrics", "", n.HTTPLog)
 	}
 	n.Config.ConsensusParams.Metrics = registry
 }
@@ -541,7 +542,7 @@ func (n *Node) initAdminAPI() {
 	if n.Config.AdminAPIEnabled {
 		n.Log.Info("initializing Admin API")
 		service := admin.NewService(n.ID, n.Config.NetworkID, n.Log, n.chainManager, n.ValidatorAPI.Connections(), &n.APIServer)
-		n.APIServer.AddRoute(service, &sync.RWMutex{}, "admin", "", n.HTTPLog)
+		n.APIServer.AddRoute(service, &deadlock.RWMutex{}, "admin", "", n.HTTPLog)
 	}
 }
 
@@ -551,7 +552,7 @@ func (n *Node) initIPCAPI() {
 	if n.Config.IPCEnabled {
 		n.Log.Info("initializing IPC API")
 		service := ipcs.NewService(n.Log, n.chainManager, n.DecisionDispatcher, &n.APIServer)
-		n.APIServer.AddRoute(service, &sync.RWMutex{}, "ipcs", "", n.HTTPLog)
+		n.APIServer.AddRoute(service, &deadlock.RWMutex{}, "ipcs", "", n.HTTPLog)
 	}
 }
 

@@ -4,13 +4,14 @@
 package timer
 
 import (
-	"sync"
 	"testing"
 	"time"
+
+	"github.com/sasha-s/go-deadlock"
 )
 
 func TestTimer(t *testing.T) {
-	wg := sync.WaitGroup{}
+	wg := deadlock.WaitGroup{}
 	wg.Add(1)
 	defer wg.Wait()
 

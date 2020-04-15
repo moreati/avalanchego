@@ -12,6 +12,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/sasha-s/go-deadlock"
 )
 
 // Log ...
@@ -21,9 +23,9 @@ type Log struct {
 	messages []string
 	size     int
 
-	wg                               sync.WaitGroup
-	flushLock, writeLock, configLock sync.Mutex
-	needsFlush                       *sync.Cond
+	wg                               deadlock.WaitGroup
+	flushLock, writeLock, configLock deadlock.Mutex
+	needsFlush                       *deadlock.Cond
 	w                                *bufio.Writer
 
 	closed bool
@@ -35,7 +37,7 @@ func New(config Config) (*Log, error) {
 		return nil, err
 	}
 	l := &Log{config: config}
-	l.needsFlush = sync.NewCond(&l.flushLock)
+	l.needsFlush = &deadlock.Cond{Cond: sync.Cond{L: &l.flushLock}}
 
 	l.wg.Add(1)
 

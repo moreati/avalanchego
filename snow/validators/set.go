@@ -6,7 +6,8 @@ package validators
 import (
 	"fmt"
 	"strings"
-	"sync"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/gecko/ids"
 	"github.com/ava-labs/gecko/utils/formatting"
@@ -56,7 +57,7 @@ func NewSet() Set { return &set{vdrMap: make(map[[20]byte]int)} }
 // in O(1) time.
 // set implements Set
 type set struct {
-	lock     sync.Mutex
+	lock     deadlock.Mutex
 	vdrMap   map[[20]byte]int
 	vdrSlice []Validator
 	sampler  random.Weighted

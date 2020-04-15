@@ -4,7 +4,7 @@
 package handler
 
 import (
-	"sync"
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/gecko/ids"
 	"github.com/ava-labs/gecko/snow"
@@ -15,7 +15,7 @@ import (
 // (Actually, it receives the incoming messages from a ChainRouter, but same difference)
 type Handler struct {
 	msgs    chan message
-	wg      sync.WaitGroup
+	wg      deadlock.WaitGroup
 	engine  common.Engine
 	msgChan <-chan common.Message
 }

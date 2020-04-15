@@ -4,8 +4,9 @@
 package timer
 
 import (
-	"sync"
 	"time"
+
+	"github.com/sasha-s/go-deadlock"
 )
 
 // Repeater ...
@@ -13,8 +14,8 @@ type Repeater struct {
 	handler func()
 	timeout chan struct{}
 
-	lock      sync.Mutex
-	wg        sync.WaitGroup
+	lock      deadlock.Mutex
+	wg        deadlock.WaitGroup
 	finished  bool
 	frequency time.Duration
 }

@@ -6,7 +6,8 @@ package snow
 import (
 	"io"
 	"net/http"
-	"sync"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/gecko/database"
 	"github.com/ava-labs/gecko/ids"
@@ -47,7 +48,7 @@ type Context struct {
 	Log                 logging.Logger
 	DecisionDispatcher  *triggers.EventDispatcher
 	ConsensusDispatcher *triggers.EventDispatcher
-	Lock                sync.RWMutex
+	Lock                deadlock.RWMutex
 	HTTP                Callable
 	Keystore            Keystore
 	SharedMemory        SharedMemory

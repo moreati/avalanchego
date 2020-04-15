@@ -7,7 +7,8 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"sync"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/gorilla/mux"
 )
@@ -18,10 +19,10 @@ var (
 )
 
 type router struct {
-	lock   sync.RWMutex
+	lock   deadlock.RWMutex
 	router *mux.Router
 
-	routeLock      sync.Mutex
+	routeLock      deadlock.Mutex
 	reservedRoutes map[string]bool                    // Reserves routes so that there can't be alias that conflict
 	aliases        map[string][]string                // Maps a route to a set of reserved routes
 	routes         map[string]map[string]http.Handler // Maps routes to a handler

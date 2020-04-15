@@ -4,11 +4,11 @@
 package timeout
 
 import (
-	"sync"
 	"testing"
 	"time"
 
 	"github.com/ava-labs/gecko/ids"
+	"github.com/sasha-s/go-deadlock"
 )
 
 func TestManagerFire(t *testing.T) {
@@ -16,7 +16,7 @@ func TestManagerFire(t *testing.T) {
 	manager.Initialize(time.Millisecond)
 	go manager.Dispatch()
 
-	wg := sync.WaitGroup{}
+	wg := deadlock.WaitGroup{}
 	wg.Add(1)
 
 	manager.Register(ids.NewShortID([20]byte{}), ids.NewID([32]byte{}), 0, wg.Done)
@@ -29,7 +29,7 @@ func TestManagerCancel(t *testing.T) {
 	manager.Initialize(50 * time.Millisecond)
 	go manager.Dispatch()
 
-	wg := sync.WaitGroup{}
+	wg := deadlock.WaitGroup{}
 	wg.Add(1)
 
 	fired := new(bool)

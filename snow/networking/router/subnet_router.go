@@ -4,7 +4,7 @@
 package router
 
 import (
-	"sync"
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/gecko/ids"
 	"github.com/ava-labs/gecko/snow/networking/handler"
@@ -18,7 +18,7 @@ import (
 // that they are working on.
 type ChainRouter struct {
 	log      logging.Logger
-	lock     sync.RWMutex
+	lock     deadlock.RWMutex
 	chains   map[[32]byte]*handler.Handler
 	timeouts *timeout.Manager
 }

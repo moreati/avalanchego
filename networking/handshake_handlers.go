@@ -19,9 +19,10 @@ import (
 	"errors"
 	"fmt"
 	"math"
-	"sync"
 	"time"
 	"unsafe"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/prometheus/client_golang/prometheus"
 
@@ -113,7 +114,7 @@ type Handshake struct {
 	reconnectTimeout timer.TimeoutManager
 	peerListGossiper *timer.Repeater
 
-	awaitingLock sync.Mutex
+	awaitingLock deadlock.Mutex
 	awaiting     []*networking.AwaitingConnections
 }
 

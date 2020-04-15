@@ -9,9 +9,10 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
-	"sync"
 	"sync/atomic"
 	"time"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/coreth"
 	"github.com/ava-labs/coreth/core"
@@ -79,20 +80,20 @@ type VM struct {
 
 	txPoolStabilizedHead common.Hash
 	txPoolStabilizedOk   chan struct{}
-	txPoolStabilizedLock sync.Mutex
+	txPoolStabilizedLock deadlock.Mutex
 
-	metalock                     sync.Mutex
+	metalock                     deadlock.Mutex
 	blockCache, blockStatusCache cache.LRU
 	lastAccepted                 *Block
 	writingMetadata              uint32
 
-	bdlock          sync.Mutex
+	bdlock          deadlock.Mutex
 	blockDelayTimer *timer.Timer
 	bdTimerState    int8
 	bdGenWaitFlag   bool
 	bdGenFlag       bool
 
-	genlock      sync.Mutex
+	genlock      deadlock.Mutex
 	txSubmitChan <-chan struct{}
 }
 

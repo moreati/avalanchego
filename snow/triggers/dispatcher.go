@@ -5,7 +5,8 @@ package triggers
 
 import (
 	"fmt"
-	"sync"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/gecko/ids"
 	"github.com/ava-labs/gecko/utils/logging"
@@ -13,7 +14,7 @@ import (
 
 // EventDispatcher receives events from consensus and dispatches the events to triggers
 type EventDispatcher struct {
-	lock          sync.Mutex
+	lock          deadlock.Mutex
 	log           logging.Logger
 	chainHandlers map[[32]byte]map[string]interface{}
 	handlers      map[string]interface{}

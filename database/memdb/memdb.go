@@ -6,7 +6,8 @@ package memdb
 import (
 	"sort"
 	"strings"
-	"sync"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/gecko/database"
 	"github.com/ava-labs/gecko/database/nodb"
@@ -18,7 +19,7 @@ const DefaultSize = 1 << 10
 // Database is an ephemeral key-value store that implements the Database
 // interface.
 type Database struct {
-	lock sync.RWMutex
+	lock deadlock.RWMutex
 	db   map[string][]byte
 }
 

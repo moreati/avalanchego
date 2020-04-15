@@ -7,8 +7,9 @@ import (
 	"bytes"
 	"net/http"
 	"net/http/httptest"
-	"sync"
 	"testing"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/gorilla/rpc/v2"
 	"github.com/gorilla/rpc/v2/json2"
@@ -38,7 +39,7 @@ func TestCall(t *testing.T) {
 	newServer.RegisterCodec(json2.NewCodec(), "application/json;charset=UTF-8")
 	newServer.RegisterService(serv, "test")
 
-	if err := s.AddRoute(&common.HTTPHandler{Handler: newServer}, new(sync.RWMutex), "vm/lol", "", logging.NoLog{}); err != nil {
+	if err := s.AddRoute(&common.HTTPHandler{Handler: newServer}, new(deadlock.RWMutex), "vm/lol", "", logging.NoLog{}); err != nil {
 		t.Fatal(err)
 	}
 

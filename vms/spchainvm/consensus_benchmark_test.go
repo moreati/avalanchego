@@ -1,11 +1,11 @@
 package spchainvm
 
 import (
-	"sync"
 	"testing"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/gecko/database/memdb"
 	"github.com/ava-labs/gecko/database/prefixdb"
@@ -114,7 +114,7 @@ func ConsensusLeader(numBlocks, numTxsPerBlock int, b *testing.B) {
 		engine.Startup()
 		ctx.Lock.Unlock()
 
-		wg := sync.WaitGroup{}
+		wg := deadlock.WaitGroup{}
 		wg.Add(numBlocks * numTxsPerBlock)
 
 		b.StartTimer()
@@ -191,7 +191,7 @@ func ConsensusFollower(numBlocks, numTxsPerBlock int, b *testing.B) {
 		router := &router.ChainRouter{}
 		router.Initialize(logging.NoLog{}, &timeoutManager)
 
-		wg := sync.WaitGroup{}
+		wg := deadlock.WaitGroup{}
 		wg.Add(numBlocks)
 
 		// Initialize the VM

@@ -5,7 +5,8 @@ package vms
 
 import (
 	"fmt"
-	"sync"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/gecko/api"
 	"github.com/ava-labs/gecko/snow/engine/common"
@@ -120,7 +121,7 @@ func (m *manager) addStaticAPIEndpoints(vmID ids.ID) {
 	// all static endpoints go to the vm endpoint, defaulting to the vm id
 	defaultEndpoint := "vm/" + vmID.String()
 	// use a single lock for this entire vm
-	lock := new(sync.RWMutex)
+	lock := new(deadlock.RWMutex)
 	// register the static endpoints
 	for extension, service := range staticVM.CreateStaticHandlers() {
 		m.log.Verbo("adding static API endpoint: %s", defaultEndpoint+extension)

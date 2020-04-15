@@ -5,7 +5,8 @@ package networking
 
 import (
 	"fmt"
-	"sync"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/salticidae-go"
 
@@ -43,7 +44,7 @@ type AddrCert struct {
 	ipToID map[uint64]ids.ShortID
 	// id -> ip
 	idToIP map[[20]byte]salticidae.NetAddr
-	mux    sync.Mutex
+	mux    deadlock.Mutex
 }
 
 // Add Assumes that addr is garbage collected normally

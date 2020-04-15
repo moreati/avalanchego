@@ -4,7 +4,7 @@
 package prefixdb
 
 import (
-	"sync"
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/gecko/database"
 	"github.com/ava-labs/gecko/database/nodb"
@@ -14,7 +14,7 @@ import (
 // Database partitions a database into a sub-database by prefixing all keys with
 // a unique value.
 type Database struct {
-	lock     sync.RWMutex
+	lock     deadlock.RWMutex
 	dbPrefix []byte
 	db       database.Database
 }

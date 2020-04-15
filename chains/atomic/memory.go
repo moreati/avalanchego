@@ -5,7 +5,8 @@ package atomic
 
 import (
 	"bytes"
-	"sync"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/gecko/database"
 	"github.com/ava-labs/gecko/database/prefixdb"
@@ -16,13 +17,13 @@ import (
 )
 
 type rcLock struct {
-	lock  sync.Mutex
+	lock  deadlock.Mutex
 	count int
 }
 
 // SharedMemory is the interface for shared memory inside a subnet
 type SharedMemory struct {
-	lock  sync.Mutex
+	lock  deadlock.Mutex
 	log   logging.Logger
 	codec codec.Codec
 	locks map[[32]byte]*rcLock
@@ -59,7 +60,7 @@ func (sm *SharedMemory) ReleaseDatabase(id ids.ID) {
 	lock.Unlock()
 }
 
-func (sm *SharedMemory) makeLock(id ids.ID) *sync.Mutex {
+func (sm *SharedMemory) makeLock(id ids.ID) *deadlock.Mutex {
 	sm.lock.Lock()
 	defer sm.lock.Unlock()
 
@@ -73,7 +74,7 @@ func (sm *SharedMemory) makeLock(id ids.ID) *sync.Mutex {
 	return &rc.lock
 }
 
-func (sm *SharedMemory) releaseLock(id ids.ID) *sync.Mutex {
+func (sm *SharedMemory) releaseLock(id ids.ID) *deadlock.Mutex {
 	sm.lock.Lock()
 	defer sm.lock.Unlock()
 

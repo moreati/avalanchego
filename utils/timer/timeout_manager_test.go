@@ -4,15 +4,16 @@
 package timer
 
 import (
-	"sync"
 	"testing"
 	"time"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/gecko/ids"
 )
 
 func TestTimeoutManager(t *testing.T) {
-	wg := sync.WaitGroup{}
+	wg := deadlock.WaitGroup{}
 	wg.Add(2)
 	defer wg.Wait()
 

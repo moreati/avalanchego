@@ -4,7 +4,7 @@
 package validators
 
 import (
-	"sync"
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/gecko/ids"
 )
@@ -32,7 +32,7 @@ func NewManager() Manager {
 
 // manager implements Manager
 type manager struct {
-	lock          sync.Mutex
+	lock          deadlock.Mutex
 	validatorSets map[[32]byte]Set
 }
 

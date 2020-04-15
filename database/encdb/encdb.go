@@ -6,7 +6,8 @@ package encdb
 import (
 	"crypto/cipher"
 	"crypto/rand"
-	"sync"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"golang.org/x/crypto/chacha20poly1305"
 
@@ -18,7 +19,7 @@ import (
 
 // Database encrypts all values that are provided
 type Database struct {
-	lock   sync.RWMutex
+	lock   deadlock.RWMutex
 	codec  codec.Codec
 	cipher cipher.AEAD
 	db     database.Database

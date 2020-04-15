@@ -5,7 +5,8 @@ package cache
 
 import (
 	"container/list"
-	"sync"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/gecko/ids"
 )
@@ -19,7 +20,7 @@ type entry struct {
 // exceeded, then an element is removed from the cache before the insertion is
 // done, based on evicting the least recently used value.
 type LRU struct {
-	lock      sync.Mutex
+	lock      deadlock.Mutex
 	entryMap  map[[32]byte]*list.Element
 	entryList *list.List
 	Size      int

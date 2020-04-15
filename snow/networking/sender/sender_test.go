@@ -5,7 +5,6 @@ package sender
 
 import (
 	"reflect"
-	"sync"
 	"testing"
 	"time"
 
@@ -16,6 +15,7 @@ import (
 	"github.com/ava-labs/gecko/snow/networking/router"
 	"github.com/ava-labs/gecko/snow/networking/timeout"
 	"github.com/ava-labs/gecko/utils/logging"
+	"github.com/sasha-s/go-deadlock"
 )
 
 func TestSenderContext(t *testing.T) {
@@ -48,7 +48,7 @@ func TestTimeout(t *testing.T) {
 
 	engine.ContextF = snow.DefaultContextTest
 
-	wg := sync.WaitGroup{}
+	wg := deadlock.WaitGroup{}
 	wg.Add(2)
 
 	failedVDRs := ids.ShortSet{}

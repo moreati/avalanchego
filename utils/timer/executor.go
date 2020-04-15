@@ -5,20 +5,22 @@ package timer
 
 import (
 	"sync"
+
+	"github.com/sasha-s/go-deadlock"
 )
 
 // Executor ...
 type Executor struct {
-	lock     sync.Mutex
-	cond     *sync.Cond
-	wg       sync.WaitGroup
+	lock     deadlock.Mutex
+	cond     *deadlock.Cond
+	wg       deadlock.WaitGroup
 	finished bool
 	events   []func()
 }
 
 // Initialize ...
 func (e *Executor) Initialize() {
-	e.cond = sync.NewCond(&e.lock)
+	e.cond = &deadlock.Cond{Cond: sync.Cond{L: &e.lock}}
 	e.wg.Add(1)
 }
 

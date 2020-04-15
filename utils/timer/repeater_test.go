@@ -4,13 +4,14 @@
 package timer
 
 import (
-	"sync"
 	"testing"
 	"time"
+
+	"github.com/sasha-s/go-deadlock"
 )
 
 func TestRepeater(t *testing.T) {
-	wg := sync.WaitGroup{}
+	wg := deadlock.WaitGroup{}
 	wg.Add(2)
 
 	val := new(int)

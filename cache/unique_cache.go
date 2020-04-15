@@ -5,12 +5,13 @@ package cache
 
 import (
 	"container/list"
-	"sync"
+
+	"github.com/sasha-s/go-deadlock"
 )
 
 // EvictableLRU is an LRU cache that notifies the objects when they are evicted.
 type EvictableLRU struct {
-	lock      sync.Mutex
+	lock      deadlock.Mutex
 	entryMap  map[[32]byte]*list.Element
 	entryList *list.List
 	Size      int

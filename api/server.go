@@ -9,7 +9,8 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"sync"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/gorilla/handlers"
 
@@ -89,7 +90,7 @@ func (s *Server) RegisterChain(ctx *snow.Context, vmIntf interface{}) {
 }
 
 // AddRoute registers the appropriate endpoint for the vm given an endpoint
-func (s *Server) AddRoute(handler *common.HTTPHandler, lock *sync.RWMutex, base, endpoint string, log logging.Logger) error {
+func (s *Server) AddRoute(handler *common.HTTPHandler, lock *deadlock.RWMutex, base, endpoint string, log logging.Logger) error {
 	url := fmt.Sprintf("%s/%s", baseURL, base)
 	s.log.Info("adding route %s%s", url, endpoint)
 	h := handlers.CombinedLoggingHandler(log, handler.Handler)

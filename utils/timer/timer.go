@@ -4,8 +4,9 @@
 package timer
 
 import (
-	"sync"
 	"time"
+
+	"github.com/sasha-s/go-deadlock"
 )
 
 // Timer wraps a timer object. This allows a user to specify a handler. Once
@@ -16,8 +17,8 @@ type Timer struct {
 	handler func()
 	timeout chan struct{}
 
-	lock                    sync.Mutex
-	wg                      sync.WaitGroup
+	lock                    deadlock.Mutex
+	wg                      deadlock.WaitGroup
 	finished, shouldExecute bool
 	duration                time.Duration
 }

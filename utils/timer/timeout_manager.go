@@ -5,8 +5,9 @@ package timer
 
 import (
 	"container/list"
-	"sync"
 	"time"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/gecko/ids"
 )
@@ -21,7 +22,7 @@ type timeout struct {
 
 // TimeoutManager is a manager for timeouts.
 type TimeoutManager struct {
-	lock        sync.Mutex
+	lock        deadlock.Mutex
 	duration    time.Duration // Amount of time before a timeout
 	timeoutMap  map[[32]byte]*list.Element
 	timeoutList *list.List

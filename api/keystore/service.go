@@ -7,7 +7,8 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"sync"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/gorilla/rpc/v2"
 
@@ -62,7 +63,7 @@ type UserDB struct {
 
 // Keystore is the RPC interface for keystore management
 type Keystore struct {
-	lock sync.Mutex
+	lock deadlock.Mutex
 	log  logging.Logger
 
 	codec codec.Codec

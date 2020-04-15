@@ -6,7 +6,8 @@ package versiondb
 import (
 	"sort"
 	"strings"
-	"sync"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/ava-labs/gecko/database"
 	"github.com/ava-labs/gecko/database/memdb"
@@ -17,7 +18,7 @@ import (
 // database, writing changes to the underlying database only when commit is
 // called.
 type Database struct {
-	lock sync.RWMutex
+	lock deadlock.RWMutex
 	mem  map[string]valueDelete
 	db   database.Database
 }

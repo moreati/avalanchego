@@ -6,8 +6,9 @@ package json
 import (
 	"errors"
 	"net/http"
-	"sync"
 	"time"
+
+	"github.com/sasha-s/go-deadlock"
 
 	"github.com/gorilla/websocket"
 
@@ -51,7 +52,7 @@ var (
 type PubSubServer struct {
 	ctx *snow.Context
 
-	lock     sync.Mutex
+	lock     deadlock.Mutex
 	conns    map[*Connection]map[string]struct{}
 	channels map[string]map[*Connection]struct{}
 }

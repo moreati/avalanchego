@@ -5,13 +5,14 @@ package timer
 
 import (
 	"container/list"
-	"sync"
 	"time"
+
+	"github.com/sasha-s/go-deadlock"
 )
 
 // TimedMeter is a meter that discards old events
 type TimedMeter struct {
-	lock sync.Mutex
+	lock deadlock.Mutex
 	// Amount of time to keep a tick
 	Duration time.Duration
 	// TODO: Currently this list has an entry for each tick... This isn't really
